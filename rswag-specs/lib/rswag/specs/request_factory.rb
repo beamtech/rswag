@@ -120,19 +120,29 @@ module Rswag
         name = param[:name]
         type = param[:type]
         type ||= param.dig(:schema, :type)
-        return "#{name}=#{value}" unless type&.to_sym == :array
+        type = type&.to_sym
 
-        case param[:collectionFormat]
-        when :ssv
-          "#{name}=#{value.join(' ')}"
-        when :tsv
-          "#{name}=#{value.join('\t')}"
-        when :pipes
-          "#{name}=#{value.join('|')}"
-        when :multi
-          value.map { |v| "#{name}=#{v}" }.join('&')
+        if type == :array
+          case param[:collectionFormat]
+          when :ssv
+            "#{name}=#{value.join(' ')}"
+          when :tsv
+            "#{name}=#{value.join('\t')}"
+          when :pipes
+            "#{name}=#{value.join('|')}"
+          when :multi
+            value.map { |v| "#{name}=#{v}" }.join('&')
+          else
+            "#{name}=#{value.join(',')}" # csv is default
+          end
+        elsif type == :object && param[:style] == :deepObject && param[:explode]
+          param_strings = value.map do |hash_key, hash_value|
+            "#{name}[#{hash_key}]=#{hash_value}"
+          end
+
+          param_strings.join('&')
         else
-          "#{name}=#{value.join(',')}" # csv is default
+          "#{name}=#{value}"
         end
       end
 
