@@ -4,6 +4,7 @@ module Rswag
 
       def initialize(app, config)
         @config = config
+        p @config
         super(app, urls: [ '' ], root: config.assets_root )
       end
 
