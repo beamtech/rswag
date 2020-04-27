@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
   s.description = 'Expose beautiful API documentation, powered by Swagger JSON endpoints, including a UI to explore and test operations'
   s.license     = 'MIT'
 
-  s.files = Dir.glob('{lib,node_modules}/**/*') + ['MIT-LICENSE', 'Rakefile' ]
-  s.extensions = 'Rakefile'
+  s.files = Dir.glob('{lib,node_modules}/**/*') + ['MIT-LICENSE', 'Rakefile', 'package.json', 'package-lock.json']
+  s.extensions << 'Rakefile'
 
   s.add_development_dependency "rake", "~> 11"
   s.add_dependency 'actionpack', '>=3.1', '< 7.0'
